@@ -1,5 +1,4 @@
 import { useFormStatus } from "react-dom";
-
 export default function SubmitButton({ children, className = "" }) {
   const { pending } = useFormStatus();
   return (

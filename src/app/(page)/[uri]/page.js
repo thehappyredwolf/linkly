@@ -23,7 +23,6 @@ import mongoose from "mongoose";
 import { btoa } from "next/dist/compiled/@edge-runtime/primitives";
 import Image from "next/image";
 import Link from "next/link";
-
 export const buttonsIcons = {
   email: faEnvelope,
   mobile: faPhone,
@@ -36,7 +35,6 @@ export const buttonsIcons = {
   github: faGithub,
   telegram: faTelegram,
 };
-
 function buttonLink(key, value) {
   if (key === "mobile") {
     return "tel:" + value;
@@ -46,7 +44,6 @@ function buttonLink(key, value) {
   }
   return value;
 }
-
 export default async function UserPage({ params }) {
   const uri = params.uri;
   mongoose.connect(process.env.MONGO_URI);

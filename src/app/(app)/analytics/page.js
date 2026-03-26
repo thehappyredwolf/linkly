@@ -9,7 +9,6 @@ import { isToday } from "date-fns";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-
 export default async function AnalyticsPage() {
   mongoose.connect(process.env.MONGO_URI);
   const session = await getServerSession(authOptions);
@@ -17,7 +16,6 @@ export default async function AnalyticsPage() {
     return redirect("/");
   }
   const page = await Page.findOne({ owner: session.user.email });
-
   const groupedViews = await Event.aggregate([
     {
       $match: {
@@ -42,12 +40,10 @@ export default async function AnalyticsPage() {
       $sort: { _id: 1 },
     },
   ]);
-
   const clicks = await Event.find({
     page: page.uri,
     type: "click",
   });
-
   return (
     <div>
       <SectionBox>

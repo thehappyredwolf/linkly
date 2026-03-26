@@ -1,5 +1,4 @@
 "use client";
-
 import { addDays, differenceInDays, formatISO9075, parseISO } from "date-fns";
 import {
   CartesianGrid,
@@ -10,10 +9,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
 export default function Chart({ data }) {
   const xLabelKey = Object.keys(data[0]).find((key) => key !== "date");
-
   const dataWithoutGaps = [];
   data.forEach((value, index) => {
     const date = value.date;
@@ -37,7 +34,6 @@ export default function Chart({ data }) {
       }
     }
   });
-
   return (
     <div>
       <ResponsiveContainer width="100%" height={200}>

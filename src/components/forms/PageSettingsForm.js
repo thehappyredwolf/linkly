@@ -14,32 +14,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
 export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
   const [bgImage, setBgImage] = useState(page.bgImage);
   const [avatar, setAvatar] = useState(user?.image);
-
   async function saveBaseSettings(formData) {
     const result = await savePageSettings(formData);
     if (result) {
       toast.success("Saved!");
     }
   }
-
   async function handleCoverImageChange(ev) {
     await upload(ev, (link) => {
       setBgImage(link);
     });
   }
-
   async function handleAvatarImageChange(ev) {
     await upload(ev, (link) => {
       setAvatar(link);
     });
   }
-
   return (
     <div>
       <SectionBox>

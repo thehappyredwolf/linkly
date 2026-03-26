@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import cloneDeep from "clone-deep";
-
 export default async function AccountPage({ searchParams }) {
   const session = await getServerSession(authOptions);
   const desiredUsername = searchParams?.desiredUsername;
@@ -17,7 +16,6 @@ export default async function AccountPage({ searchParams }) {
   }
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ owner: session?.user?.email });
-
   const leanPage = cloneDeep(page?.toJSON?.() || {});
   if (leanPage._id) leanPage._id = leanPage._id.toString();
   if (page) {
@@ -29,7 +27,6 @@ export default async function AccountPage({ searchParams }) {
       </>
     );
   }
-
   return (
     <div>
       <UsernameForm desiredUsername={desiredUsername} />

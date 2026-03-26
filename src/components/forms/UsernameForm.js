@@ -4,10 +4,8 @@ import SubmitButton from "@/components/buttons/SubmitButton";
 import RightIcon from "@/components/icons/RightIcon";
 import { redirect } from "next/navigation";
 import { useState } from "react";
-
 export default function UsernameForm({ desiredUsername }) {
   const [taken, setTaken] = useState(false);
-
   async function handleSubmit(formData) {
     const result = await grabUsername(formData);
     setTaken(result === false);
@@ -15,7 +13,6 @@ export default function UsernameForm({ desiredUsername }) {
       redirect("/account?created=" + formData.get("username"));
     }
   }
-
   return (
     <form action={handleSubmit}>
       <h1 className="text-4xl font-bold text-center mb-2">

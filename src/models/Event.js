@@ -2,9 +2,9 @@ import { model, models, Schema } from "mongoose";
 
 const EventSchema = new Schema(
   {
-    type: String, // click or view
-    page: String, // for example "dawid"
-    uri: String, // /dawid | https://
+    type: String,
+    page: String,
+    uri: String,
   },
   { timestamps: true },
 );

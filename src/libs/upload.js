@@ -1,8 +1,6 @@
 import toast from "react-hot-toast";
-
 export async function upload(ev, callbackFn) {
   const file = ev.target.files?.[0];
-
   if (file) {
     const uploadPromise = new Promise((resolve, reject) => {
       const data = new FormData();
@@ -21,7 +19,6 @@ export async function upload(ev, callbackFn) {
         }
       });
     });
-
     await toast.promise(uploadPromise, {
       loading: "Uploading...",
       success: "Uploaded!",

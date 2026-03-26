@@ -16,15 +16,12 @@ import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
-
 export default function PageLinksForm({ page, user }) {
   const [links, setLinks] = useState(page.links || []);
-
   async function save() {
     await savePageLinks(links);
     toast.success("Saved!");
   }
-
   function addNewLink() {
     setLinks((prev) => {
       return [
@@ -39,7 +36,6 @@ export default function PageLinksForm({ page, user }) {
       ];
     });
   }
-
   function handleUpload(ev, linkKeyForUpload) {
     upload(ev, (uploadedImageUrl) => {
       setLinks((prevLinks) => {
@@ -53,7 +49,6 @@ export default function PageLinksForm({ page, user }) {
       });
     });
   }
-
   function handleLinkChange(keyOfLinkToChange, prop, ev) {
     setLinks((prev) => {
       const newLinks = [...prev];
@@ -65,13 +60,11 @@ export default function PageLinksForm({ page, user }) {
       return [...prev];
     });
   }
-
   function removeLink(linkKeyToRemove) {
     setLinks((prevLinks) =>
       [...prevLinks].filter((l) => l.key !== linkKeyToRemove),
     );
   }
-
   return (
     <SectionBox>
       <form action={save}>
