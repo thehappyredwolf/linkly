@@ -11,7 +11,6 @@ import {
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 export default function PageSettingsForm({ page, user }) {
@@ -93,12 +92,14 @@ export default function PageSettingsForm({ page, user }) {
           <div className="flex justify-center -mb-12">
             <div className="relative -top-8 w-[128px] h-[128px]">
               <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
-                <Image
+                <img
                   className="w-full h-full object-cover"
                   src={avatar}
-                  alt={"avatar"}
+                  alt="avatar"
                   width={128}
                   height={128}
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
                 />
               </div>
               <label

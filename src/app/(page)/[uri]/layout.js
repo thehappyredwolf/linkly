@@ -8,8 +8,8 @@ export const metadata = {
 };
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={lato.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={lato.className} suppressHydrationWarning>
         <main>{children}</main>
       </body>
     </html>

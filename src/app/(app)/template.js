@@ -5,7 +5,6 @@ import { faBars, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
@@ -36,12 +35,13 @@ export default async function AppTemplate({ children, ...rest }) {
         <aside className="bg-white w-48 p-4 pt-6 shadow fixed md:static -left-48 top-0 bottom-0 z-20 transition-all">
           <div className="sticky top-0 pt-2">
             <div className="rounded-full overflow-hidden aspect-square w-24 mx-auto">
-              <Image
+              <img
                 src={session.user.image}
                 width={256}
                 height={256}
-                alt={"avatar"}
-                unoptimized
+                alt="avatar"
+                loading="lazy"
+                referrerPolicy="no-referrer"
               />
             </div>
             {page && (

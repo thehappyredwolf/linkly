@@ -12,7 +12,6 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
@@ -93,12 +92,14 @@ export default function PageLinksForm({ page, user }) {
                 <div className="text-center">
                   <div className="bg-gray-300 inline-block relative aspect-square overflow-hidden w-16 h-16 inline-flex justify-center items-center">
                     {l.icon && (
-                      <Image
+                      <img
                         className="w-full h-full object-cover"
                         src={l.icon}
-                        alt={"icon"}
+                        alt="icon"
                         width={64}
                         height={64}
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
                       />
                     )}
                     {!l.icon && <FontAwesomeIcon size="xl" icon={faLink} />}

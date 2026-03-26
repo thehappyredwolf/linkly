@@ -21,7 +21,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import mongoose from "mongoose";
 import { btoa } from "next/dist/compiled/@edge-runtime/primitives";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 export const buttonsIcons = {
@@ -68,12 +67,14 @@ export default async function UserPage({ params }) {
         }
       ></div>
       <div className="aspect-square w-36 h-36 mx-auto relative -top-16 -mb-12">
-        <Image
+        <img
           className="rounded-full w-full h-full object-cover"
           src={user.image}
           alt="avatar"
           width={256}
           height={256}
+          loading="lazy"
+          referrerPolicy="no-referrer"
         />
       </div>
       <h2 className="text-2xl text-center mb-1">{page.displayName}</h2>
@@ -116,12 +117,14 @@ export default async function UserPage({ params }) {
             <div className="relative -left-4 overflow-hidden w-16">
               <div className="w-16 h-16 bg-blue-700 aspect-square relative flex items-center justify-center aspect-square">
                 {link.icon && (
-                  <Image
+                  <img
                     className="w-full h-full object-cover"
                     src={link.icon}
-                    alt={"icon"}
+                    alt="icon"
                     width={64}
                     height={64}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
                   />
                 )}
                 {!link.icon && (
