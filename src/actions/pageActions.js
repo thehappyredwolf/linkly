@@ -1,6 +1,7 @@
 "use server";
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
+import { revalidatePath } from "next/cache";
 import mongoose from "mongoose";
 export async function savePageSettings(formData) {
   mongoose.connect(process.env.MONGO_URI);
@@ -25,11 +26,13 @@ export async function savePageSettings(formData) {
       bgImage,
     };
 
+    console.log("Server saving:", { bgImage, avatar, displayName });
     await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
 
     if (avatar) {
       await User.updateOne({ email: session?.user?.email }, { image: avatar });
     }
+    revalidatePath("/account");
     return true;
   }
   return false;
@@ -49,6 +52,7 @@ export async function savePageButtons(formData) {
     }
 
     await Page.updateOne({ owner: session?.user?.email }, { buttons });
+    revalidatePath("/account");
     return true;
   }
   return false;
@@ -60,6 +64,7 @@ export async function savePageLinks(links) {
   const session = await getServerSession(authOptions);
   if (session) {
     await Page.updateOne({ owner: session?.user?.email }, { links });
+    revalidatePath("/account");
     return true;
   } else {
     return false;

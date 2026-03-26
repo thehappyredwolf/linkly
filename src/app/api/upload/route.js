@@ -7,18 +7,27 @@ cloudinary.config({
 });
 
 export async function POST(req) {
-  const formData = await req.formData();
-  if (formData.has("file")) {
-    const file = formData.get("file");
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ resource_type: "auto" }, (err, result) => {
-          if (err) reject(err);
-          else resolve(result);
-        })
-        .end(buffer);
-    });
-    return Response.json(uploadResult.secure_url);
+  try {
+    const formData = await req.formData();
+    if (formData.has("file")) {
+      const file = formData.get("file");
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ resource_type: "auto" }, (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+          })
+          .end(buffer);
+      });
+      console.log("Upload successful:", uploadResult.secure_url);
+      return Response.json(uploadResult.secure_url);
+    }
+  } catch (error) {
+    console.error("Upload error:", error);
+    return Response.json(
+      { error: error.message || "Upload failed" },
+      { status: 500 },
+    );
   }
 }

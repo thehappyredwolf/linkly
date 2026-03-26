@@ -19,6 +19,8 @@ export default function PageSettingsForm({ page, user }) {
   const [bgImage, setBgImage] = useState(page.bgImage);
   const [avatar, setAvatar] = useState(user?.image);
   async function saveBaseSettings(formData) {
+    console.log("Saving with bgImage:", bgImage);
+    console.log("Saving with avatar:", avatar);
     const result = await savePageSettings(formData);
     if (result) {
       toast.success("Saved!");

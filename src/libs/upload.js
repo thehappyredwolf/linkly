@@ -8,21 +8,30 @@ export async function upload(ev, callbackFn) {
       fetch("/api/upload", {
         method: "POST",
         body: data,
-      }).then((response) => {
-        if (response.ok) {
-          response.json().then((link) => {
-            callbackFn(link);
-            resolve(link);
-          });
-        } else {
-          reject();
-        }
-      });
+      })
+        .then((response) => {
+          if (response.ok) {
+            response.json().then((link) => {
+              console.log("Image uploaded successfully:", link);
+              callbackFn(link);
+              resolve(link);
+            });
+          } else {
+            response.json().then((err) => {
+              console.error("Upload failed:", err);
+              reject(new Error(err?.error || "Upload failed"));
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Upload error:", error);
+          reject(error);
+        });
     });
     await toast.promise(uploadPromise, {
       loading: "Uploading...",
       success: "Uploaded!",
-      error: "Upload error!",
+      error: (err) => `Upload error: ${err?.message || "Unknown error"}`,
     });
   }
 }

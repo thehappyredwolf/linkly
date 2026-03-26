@@ -1,6 +1,7 @@
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import { Event } from "@/models/Event";
+import LinkWithTracking from "@/components/LinkWithTracking";
 import {
   faDiscord,
   faFacebook,
@@ -45,7 +46,8 @@ function buttonLink(key, value) {
   return value;
 }
 export default async function UserPage({ params }) {
-  const uri = params.uri;
+  const { uri: rawUri } = await params;
+  const uri = rawUri?.toLowerCase();
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ uri });
   if (!page) {
@@ -57,40 +59,48 @@ export default async function UserPage({ params }) {
     page?.buttons && typeof page.buttons === "object" ? page.buttons : {};
   const links = Array.isArray(page?.links) ? page.links : [];
   return (
-    <div className="bg-blue-950 text-white min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       <div
-        className="h-36 bg-gray-400 bg-cover bg-center"
+        className="h-40 bg-gradient-to-b from-purple-400 via-pink-400 to-slate-100 bg-cover bg-center relative overflow-hidden"
         style={
           page.bgType === "color"
             ? { backgroundColor: page.bgColor }
             : { backgroundImage: `url(${page.bgImage})` }
         }
-      ></div>
-      <div className="aspect-square w-36 h-36 mx-auto relative -top-16 -mb-12">
-        <img
-          className="rounded-full w-full h-full object-cover"
-          src={user.image}
-          alt="avatar"
-          width={256}
-          height={256}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-        />
+      >
+        <div className="absolute inset-0 bg-black/20"></div>
       </div>
-      <h2 className="text-2xl text-center mb-1">{page.displayName}</h2>
-      <h3 className="text-md flex gap-2 justify-center items-center text-white/70">
-        <FontAwesomeIcon className="h-4" icon={faLocationDot} />
-        <span>{page.location}</span>
-      </h3>
-      <div className="max-w-xs mx-auto text-center my-2">
-        <p>{page.bio}</p>
+      <div className="aspect-square w-32 h-32 mx-auto relative -top-16 -mb-8 z-10">
+        <div className="rounded-full w-full h-full object-cover ring-4 ring-white shadow-xl overflow-hidden bg-slate-200">
+          <img
+            className="w-full h-full object-cover"
+            src={user.image}
+            alt="avatar"
+            width={256}
+            height={256}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        </div>
       </div>
-      <div className="flex gap-2 justify-center mt-4 pb-4">
+      <div className="px-6 text-center pb-8">
+        <h2 className="text-3xl font-poppins font-bold text-slate-900 mb-2 gradient-text">
+          {page.displayName}
+        </h2>
+        <h3 className="text-sm flex gap-2 justify-center items-center text-slate-600 font-medium mb-4">
+          <FontAwesomeIcon className="h-4" icon={faLocationDot} />
+          <span>{page.location}</span>
+        </h3>
+        <div className="max-w-md mx-auto text-center mb-6">
+          <p className="text-slate-700 leading-relaxed">{page.bio}</p>
+        </div>
+      </div>
+      <div className="flex gap-2 justify-center pb-8 px-4 flex-wrap">
         {Object.keys(buttons).map((buttonKey) => (
           <Link
             key={buttonKey}
             href={buttonLink(buttonKey, buttons[buttonKey])}
-            className="rounded-full bg-white text-blue-950 p-2 flex items-center justify-center"
+            className="rounded-full bg-white border border-slate-200 text-slate-700 p-3 flex items-center justify-center hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:border-purple-200 transition-all hover:scale-110"
           >
             <FontAwesomeIcon
               className="w-5 h-5"
@@ -99,48 +109,9 @@ export default async function UserPage({ params }) {
           </Link>
         ))}
       </div>
-      <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-8">
+      <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-4 p-6 px-4 pb-12">
         {links.map((link) => (
-          <Link
-            key={link.url}
-            target="_blank"
-            ping={
-              process.env.URL +
-              "api/click?url=" +
-              btoa(link.url) +
-              "&page=" +
-              page.uri
-            }
-            className="bg-indigo-800 p-2 block flex"
-            href={link.url}
-          >
-            <div className="relative -left-4 overflow-hidden w-16">
-              <div className="w-16 h-16 bg-blue-700 aspect-square relative flex items-center justify-center aspect-square">
-                {link.icon && (
-                  <img
-                    className="w-full h-full object-cover"
-                    src={link.icon}
-                    alt="icon"
-                    width={64}
-                    height={64}
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                )}
-                {!link.icon && (
-                  <FontAwesomeIcon icon={faLink} className="w-8 h-8" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-center shrink grow-0 overflow-hidden">
-              <div>
-                <h3>{link.title}</h3>
-                <p className="text-white/50 h-6 overflow-hidden">
-                  {link.subtitle}
-                </p>
-              </div>
-            </div>
-          </Link>
+          <LinkWithTracking key={link.url} link={link} pageUri={page.uri} />
         ))}
       </div>
     </div>

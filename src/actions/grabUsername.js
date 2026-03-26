@@ -5,7 +5,7 @@ export async function grabUsername(input) {
   mongoose.connect(process.env.MONGO_URI);
   const username =
     typeof input === "string" ? input : input?.get?.("username")?.toString();
-  const normalizedUsername = username?.trim();
+  const normalizedUsername = username?.trim()?.toLowerCase();
 
   if (!normalizedUsername) {
     return { ok: false, message: "Username is required" };

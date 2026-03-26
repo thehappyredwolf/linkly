@@ -24,11 +24,13 @@ export default async function AccountPage({ searchParams }) {
   if (!Array.isArray(leanPage.links)) leanPage.links = [];
   if (page) {
     return (
-      <>
-        <PageSettingsForm page={leanPage} user={session.user} />
-        <PageButtonsForm page={leanPage} user={session.user} />
-        <PageLinksForm page={leanPage} user={session.user} />
-      </>
+      <div className="fade-in">
+        <div className="space-y-6">
+          <PageSettingsForm page={leanPage} user={session.user} />
+          <PageButtonsForm page={leanPage} user={session.user} />
+          <PageLinksForm page={leanPage} user={session.user} />
+        </div>
+      </div>
     );
   }
   return (

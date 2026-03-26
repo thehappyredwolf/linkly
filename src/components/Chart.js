@@ -10,6 +10,16 @@ import {
   YAxis,
 } from "recharts";
 export default function Chart({ data }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-slate-500">
+          No data available yet. Share your page to see analytics.
+        </p>
+      </div>
+    );
+  }
+
   const xLabelKey = Object.keys(data[0]).find((key) => key !== "date");
   const dataWithoutGaps = [];
   data.forEach((value, index) => {

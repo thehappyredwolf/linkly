@@ -8,45 +8,35 @@ import { usePathname } from "next/navigation";
 export default function AppSidebar() {
   const path = usePathname();
   return (
-    <nav className="inline-flex mx-auto flex-col text-center mt-8 gap-2 text-gray-500">
+    <nav className="inline-flex mx-auto flex-col gap-1 text-slate-600">
       <Link
         href={"/account"}
-        className={
-          "flex gap-4 p-2 " + (path === "/account" ? "text-blue-500" : "")
-        }
+        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+          path === "/account"
+            ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 font-semibold"
+            : "hover:bg-slate-50"
+        }`}
       >
-        <FontAwesomeIcon
-          fixedWidth={true}
-          icon={faFileLines}
-          className={"w-6 h-6"}
-        />
-        <span className="">My Page</span>
+        <FontAwesomeIcon icon={faFileLines} className="w-5 h-5" />
+        <span>My Page</span>
       </Link>
       <Link
         href={"/analytics"}
-        className={
-          "flex gap-4 p-2 " + (path === "/analytics" ? "text-blue-500" : "")
-        }
+        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+          path === "/analytics"
+            ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 font-semibold"
+            : "hover:bg-slate-50"
+        }`}
       >
-        <FontAwesomeIcon
-          fixedWidth={true}
-          icon={faChartLine}
-          className={"w-6 h-6"}
-        />
-        <span className="">Analytics</span>
+        <FontAwesomeIcon icon={faChartLine} className="w-5 h-5" />
+        <span>Analytics</span>
       </Link>
+      <div className="border-t border-slate-200 my-2"></div>
       <LogoutButton
         iconLeft={true}
-        className={"flex gap-4 items-center text-gray-500 p-2"}
-        iconClasses={"w-6 h-6"}
+        className="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition"
+        iconClasses="w-5 h-5"
       />
-      <Link
-        href={"/"}
-        className="flex items-center gap-2 text-xs text-gray-500 border-t pt-4"
-      >
-        <FontAwesomeIcon icon={faArrowLeft} className={"w-3 h-3"} />
-        <span>Back to website</span>
-      </Link>
     </nav>
   );
 }
