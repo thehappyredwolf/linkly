@@ -23,6 +23,7 @@ import mongoose from "mongoose";
 import { btoa } from "next/dist/compiled/@edge-runtime/primitives";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 export const buttonsIcons = {
   email: faEnvelope,
   mobile: faPhone,
@@ -48,8 +49,14 @@ export default async function UserPage({ params }) {
   const uri = params.uri;
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ uri });
+  if (!page) {
+    return notFound();
+  }
   const user = await User.findOne({ email: page.owner });
   await Event.create({ uri: uri, page: uri, type: "view" });
+  const buttons =
+    page?.buttons && typeof page.buttons === "object" ? page.buttons : {};
+  const links = Array.isArray(page?.links) ? page.links : [];
   return (
     <div className="bg-blue-950 text-white min-h-screen">
       <div
@@ -78,10 +85,10 @@ export default async function UserPage({ params }) {
         <p>{page.bio}</p>
       </div>
       <div className="flex gap-2 justify-center mt-4 pb-4">
-        {Object.keys(page.buttons).map((buttonKey) => (
+        {Object.keys(buttons).map((buttonKey) => (
           <Link
             key={buttonKey}
-            href={buttonLink(buttonKey, page.buttons[buttonKey])}
+            href={buttonLink(buttonKey, buttons[buttonKey])}
             className="rounded-full bg-white text-blue-950 p-2 flex items-center justify-center"
           >
             <FontAwesomeIcon
@@ -92,7 +99,7 @@ export default async function UserPage({ params }) {
         ))}
       </div>
       <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-8">
-        {page.links.map((link) => (
+        {links.map((link) => (
           <Link
             key={link.url}
             target="_blank"

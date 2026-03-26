@@ -59,10 +59,12 @@ function upperFirst(str) {
 }
 
 export default function PageButtonsForm({ user, page }) {
-  const pageSavedButtonsKeys = Object.keys(page.buttons);
-  const pageSavedButtonsInfo = pageSavedButtonsKeys.map((k) =>
-    allButtons.find((b) => b.key === k),
-  );
+  const buttons =
+    page?.buttons && typeof page.buttons === "object" ? page.buttons : {};
+  const pageSavedButtonsKeys = Object.keys(buttons);
+  const pageSavedButtonsInfo = pageSavedButtonsKeys
+    .map((k) => allButtons.find((b) => b.key === k))
+    .filter(Boolean);
   const [activeButtons, setActiveButtons] = useState(pageSavedButtonsInfo);
 
   function addButtonToProfile(button) {
@@ -109,7 +111,7 @@ export default function PageButtonsForm({ user, page }) {
                 <input
                   placeholder={b.placeholder}
                   name={b.key}
-                  defaultValue={page.buttons[b.key]}
+                  defaultValue={buttons[b.key]}
                   type="text"
                   style={{ marginBottom: "0" }}
                 />

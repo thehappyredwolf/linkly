@@ -1,41 +1,54 @@
 "use server";
 import { Page } from "@/models/Page";
+import { User } from "@/models/User";
 import mongoose from "mongoose";
-export async function savePageSettings(data) {
+export async function savePageSettings(formData) {
   mongoose.connect(process.env.MONGO_URI);
   const { getServerSession } = await import("next-auth/next");
   const { authOptions } = await import("@/app/api/auth/[...nextauth]/route");
   const session = await getServerSession(authOptions);
   if (session) {
+    const displayName = formData?.get?.("displayName")?.toString() ?? "";
+    const bio = formData?.get?.("bio")?.toString() ?? "";
+    const location = formData?.get?.("location")?.toString() ?? "";
+    const bgType = formData?.get?.("bgType")?.toString() ?? "color";
+    const bgColor = formData?.get?.("bgColor")?.toString() ?? "#000";
+    const bgImage = formData?.get?.("bgImage")?.toString() ?? "";
+    const avatar = formData?.get?.("avatar")?.toString() ?? "";
+
     const dataToUpdate = {
-      displayName: data.displayName,
-      bio: data.bio,
-      location: data.location,
-      backgroundType: data.backgroundType,
-      backgroundColor: data.backgroundColor,
-      backgroundImage: data.backgroundImage,
-      avatar: data.avatar,
+      displayName,
+      bio,
+      location,
+      bgType,
+      bgColor,
+      bgImage,
     };
+
     await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
+
+    if (avatar) {
+      await User.updateOne({ email: session?.user?.email }, { image: avatar });
+    }
     return true;
   }
   return false;
 }
-export async function savePageButtons(buttons) {
+export async function savePageButtons(formData) {
   mongoose.connect(process.env.MONGO_URI);
   const { getServerSession } = await import("next-auth/next");
   const { authOptions } = await import("@/app/api/auth/[...nextauth]/route");
   const session = await getServerSession(authOptions);
   if (session) {
-    const buttonsValues = buttons.map((button) => ({
-      id: button.id,
-      label: button.label,
-      url: button.url,
-      icon: button.icon,
-      color: button.color,
-    }));
-    const dataToUpdate = { buttons: buttonsValues };
-    await Page.updateOne({ owner: session?.user?.email }, dataToUpdate);
+    const buttons = {};
+    for (const [key, value] of formData.entries()) {
+      const stringValue = value?.toString?.().trim?.() ?? "";
+      if (stringValue) {
+        buttons[key] = stringValue;
+      }
+    }
+
+    await Page.updateOne({ owner: session?.user?.email }, { buttons });
     return true;
   }
   return false;
@@ -47,6 +60,7 @@ export async function savePageLinks(links) {
   const session = await getServerSession(authOptions);
   if (session) {
     await Page.updateOne({ owner: session?.user?.email }, { links });
+    return true;
   } else {
     return false;
   }

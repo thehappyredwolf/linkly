@@ -1,9 +1,24 @@
 "use server";
 import { Page } from "@/models/Page";
 import mongoose from "mongoose";
-export async function grabUsername(username) {
+export async function grabUsername(input) {
   mongoose.connect(process.env.MONGO_URI);
-  const existingPage = await Page.findOne({ uri: username });
+  const username =
+    typeof input === "string" ? input : input?.get?.("username")?.toString();
+  const normalizedUsername = username?.trim();
+
+  if (!normalizedUsername) {
+    return { ok: false, message: "Username is required" };
+  }
+
+  if (!/^[a-zA-Z0-9_-]+$/.test(normalizedUsername)) {
+    return {
+      ok: false,
+      message: "Username can only contain letters, numbers, _ and -",
+    };
+  }
+
+  const existingPage = await Page.findOne({ uri: normalizedUsername });
   if (existingPage) {
     return { ok: false, message: "Username is taken" };
   }
@@ -15,10 +30,10 @@ export async function grabUsername(username) {
   }
   try {
     const newPage = await Page.create({
-      uri: username,
+      uri: normalizedUsername,
       owner: session.user.email,
     });
-    return { ok: true };
+    return { ok: true, username: newPage.uri };
   } catch (err) {
     return { ok: false, message: "Error creating page" };
   }

@@ -18,6 +18,9 @@ export default async function AccountPage({ searchParams }) {
   const page = await Page.findOne({ owner: session?.user?.email });
   const leanPage = cloneDeep(page?.toJSON?.() || {});
   if (leanPage._id) leanPage._id = leanPage._id.toString();
+  if (!leanPage.buttons || typeof leanPage.buttons !== "object")
+    leanPage.buttons = {};
+  if (!Array.isArray(leanPage.links)) leanPage.links = [];
   if (page) {
     return (
       <>

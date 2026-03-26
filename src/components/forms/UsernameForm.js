@@ -2,17 +2,26 @@
 import { grabUsername } from "@/actions/grabUsername";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import RightIcon from "@/components/icons/RightIcon";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function UsernameForm({ desiredUsername }) {
+  const router = useRouter();
   const [taken, setTaken] = useState(false);
+  const [message, setMessage] = useState("");
+
   async function handleSubmit(formData) {
     const result = await grabUsername(formData);
-    setTaken(result === false);
-    if (result) {
-      redirect("/account?created=" + formData.get("username"));
+    if (!result?.ok) {
+      setTaken(true);
+      setMessage(result?.message || "Could not create username");
+      return;
     }
+
+    setTaken(false);
+    setMessage("");
+    router.push("/account?created=" + encodeURIComponent(result.username));
   }
+
   return (
     <form action={handleSubmit}>
       <h1 className="text-4xl font-bold text-center mb-2">
@@ -29,7 +38,7 @@ export default function UsernameForm({ desiredUsername }) {
         />
         {taken && (
           <div className="bg-red-200 border border-red-500 p-2 mb-2 text-center">
-            This username is taken
+            {message || "This username is taken"}
           </div>
         )}
         <SubmitButton>
