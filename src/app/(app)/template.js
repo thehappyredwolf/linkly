@@ -50,7 +50,7 @@ export default async function AppTemplate({ children, ...rest }) {
                   width={256}
                   height={256}
                   alt={"avatar"}
-                  priority
+                  unoptimized
                 />
               </div>
               {page && (
