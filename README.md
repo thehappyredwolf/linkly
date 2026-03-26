@@ -39,11 +39,6 @@ Built with Next.js, React, and MongoDB. Sign up, create your personalized link p
 - Mongoose 9.3.3 - ODM
 - Cloudinary 2.2.0 - Image hosting
 
-**Dev Tools:**
-
-- ESLint 9 - Code linting
-- JavaScript - App language
-
 ## Project Structure
 
 ```
