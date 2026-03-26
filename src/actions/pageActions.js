@@ -1,6 +1,6 @@
 "use server";
 
-import Page from "@/models/Page";
+import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 
 export async function savePageSettings(data) {

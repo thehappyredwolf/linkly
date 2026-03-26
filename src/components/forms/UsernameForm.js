@@ -1,5 +1,5 @@
 "use client";
-import grabUsername from "@/actions/grabUsername";
+import { grabUsername } from "@/actions/grabUsername";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import RightIcon from "@/components/icons/RightIcon";
 import { redirect } from "next/navigation";
