@@ -4,6 +4,8 @@ A simple link aggregator that lets you create a beautiful landing page with all 
 
 Try it live: [linklyyyyy.vercel.app](https://linklyyyyy.vercel.app/)
 
+![Linkly Demo](./demo.png)
+
 ## Overview
 
 Built with Next.js, React, and MongoDB. Sign up, create your personalized link page with custom branding, organize your links, and track how many people click on them.
